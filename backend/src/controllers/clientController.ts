@@ -27,11 +27,11 @@ export const getClientById = async (req: AuthRequest, res: Response) => {
     const coach_id = req.user!.id;
     const client_id = parseInt(req.params.id, 10);
     const client = await ClientModel.findByIdAndCoach(client_id, coach_id);
-    
+
     if (!client) {
       return res.status(404).json({ success: false, data: null, message: 'Cliente no encontrado' });
     }
-    
+
     return res.status(200).json({ success: true, data: client, message: 'Cliente encontrado' });
   } catch (error) {
     console.error(error);
@@ -86,7 +86,7 @@ export const updateClient = async (req: AuthRequest, res: Response) => {
     // Recalculate IMC if peso or altura is updated
     const finalPeso = updates.peso !== undefined ? updates.peso : existingClient.peso;
     const finalAltura = updates.altura !== undefined ? updates.altura : existingClient.altura;
-    
+
     if (updates.peso !== undefined || updates.altura !== undefined) {
       updates.imc = calculateIMC(finalPeso, finalAltura) || existingClient.imc;
     }
@@ -108,7 +108,7 @@ export const deleteClient = async (req: AuthRequest, res: Response) => {
   try {
     const coach_id = req.user!.id;
     const client_id = parseInt(req.params.id, 10);
-    
+
     const deleted = await ClientModel.delete(client_id, coach_id);
     if (!deleted) {
       return res.status(404).json({ success: false, data: null, message: 'Cliente no encontrado' });
