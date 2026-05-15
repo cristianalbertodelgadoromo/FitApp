@@ -46,7 +46,13 @@ export const Navbar = () => {
   const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: '📊', show: esCoach() || esAdmin() },
     { name: 'Diario', path: '/food-log', icon: '🍎', show: true },
+    { name: 'Comunidad', path: '/community', icon: '👥', show: true },
+    { name: 'Mi Coach', path: '/my-coach', icon: '👨‍🏫', show: esCliente() },
+    { name: 'Pagos', path: '/payments', icon: '💳', show: true },
     { name: 'Rutinas', path: esCliente() ? '/my-routine' : '/routines', icon: '🏋️', show: true },
+
+
+
     { name: 'Alimentos', path: '/foods', icon: '🍱', show: esCoach() || esAdmin() },
     { name: 'Ejercicios', path: '/exercises', icon: '💪', show: esCoach() || esAdmin() },
   ];
@@ -70,7 +76,7 @@ export const Navbar = () => {
         alignItems: 'center',
       }}>
         {/* Logo */}
-        <div 
+        <div
           onClick={() => navigate('/dashboard')}
           style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
         >
@@ -171,9 +177,9 @@ export const Navbar = () => {
           >
             <div style={{ padding: '1rem 0' }}>
               {menuItems.filter(item => item.show).map(item => (
-                <NavLink 
-                  key={item.path} 
-                  to={item.path} 
+                <NavLink
+                  key={item.path}
+                  to={item.path}
                   style={mobileNavLinkStyle}
                   onClick={() => setIsOpen(false)}
                 >

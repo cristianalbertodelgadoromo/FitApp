@@ -7,6 +7,9 @@ import exerciseRoutes from './routes/exerciseRoutes';
 import foodLogRoutes from './routes/foodLogRoutes';
 import routineRoutes from './routes/routineRoutes';
 import progressRoutes from './routes/progressRoutes';
+import postRoutes from './routes/postRoutes';
+import coachRoutes from './routes/coachRoutes';
+import paymentRoutes from './routes/paymentRoutes';
 import path from 'path';
 
 const app = express();
@@ -23,6 +26,12 @@ app.use('/api/exercises', exerciseRoutes);
 app.use('/api/food-logs', foodLogRoutes);
 app.use('/api/routines', routineRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/coaches', coachRoutes);
+app.use('/api/payments', paymentRoutes);
+
+
+
 
 
 // Base route

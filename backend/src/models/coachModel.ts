@@ -30,5 +30,18 @@ export const CoachModel = {
       [coach.nombre, coach.telefono, coach.password_hash]
     );
     return result.insertId;
+  },
+
+  async findByClientId(clientId: number): Promise<Omit<Coach, 'password_hash'> | null> {
+    const [rows] = await pool.query<RowDataPacket[]>(
+      `SELECT c.id, c.nombre, c.telefono, c.rol, c.created_at 
+       FROM coaches c 
+       JOIN clients cl ON c.id = cl.coach_id 
+       WHERE cl.id = ?`,
+      [clientId]
+    );
+    if (rows.length === 0) return null;
+    return rows[0] as Omit<Coach, 'password_hash'>;
   }
 };
+

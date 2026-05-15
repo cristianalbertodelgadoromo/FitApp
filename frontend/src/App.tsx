@@ -18,8 +18,14 @@ import { MyRoutinePage } from './pages/MyRoutinePage';
 import { ProgressPage } from './pages/ProgressPage';
 import { ProgressFormPage } from './pages/ProgressFormPage';
 import { ProgressComparePage } from './pages/ProgressComparePage';
+import { CommunityPage } from './pages/CommunityPage';
+import { CoachProfilePage } from './pages/CoachProfilePage';
+import { PaymentsPage } from './pages/PaymentsPage';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
+
+
+
   const token = localStorage.getItem('token');
   return token ? <>{children}</> : <Navigate to="/login" />;
 };
@@ -50,8 +56,14 @@ function App() {
           <Route path="/progress/:clientId" element={<PrivateRoute><ProgressPage /></PrivateRoute>} />
           <Route path="/progress/new/:clientId" element={<PrivateRoute><ProgressFormPage /></PrivateRoute>} />
           <Route path="/progress/compare" element={<PrivateRoute><ProgressComparePage /></PrivateRoute>} />
+          <Route path="/community" element={<PrivateRoute><CommunityPage /></PrivateRoute>} />
+          <Route path="/my-coach" element={<PrivateRoute><CoachProfilePage /></PrivateRoute>} />
+          <Route path="/payments" element={<PrivateRoute><PaymentsPage /></PrivateRoute>} />
 
           <Route path="*" element={<Navigate to="/dashboard" />} />
+
+
+
         </Routes>
       </BrowserRouter>
     </AuthProvider>
