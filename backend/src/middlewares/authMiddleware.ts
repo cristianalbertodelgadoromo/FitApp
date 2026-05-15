@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../utils/auth';
+import { RolType } from '../types/roles';
 
 export interface AuthRequest extends Request<any> {
   user?: {
     id: number;
     telefono: string;
+    rol: RolType;
   };
 }
 

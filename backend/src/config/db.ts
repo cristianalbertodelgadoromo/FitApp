@@ -16,9 +16,9 @@ export const pool = mysql.createPool({
 export const checkConnection = async () => {
   try {
     const connection = await pool.getConnection();
-    console.log('✅ Base de datos conectada con éxito.');
+    console.log('Base de datos conectada con éxito.');
     connection.release();
   } catch (error) {
-    console.error('❌ Error al conectar a la base de datos:', error);
+    console.error('Error al conectar a la base de datos:', error);
   }
 };

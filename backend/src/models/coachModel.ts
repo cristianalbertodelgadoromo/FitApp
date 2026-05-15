@@ -1,10 +1,12 @@
 import { pool } from '../config/db';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { RolType } from '../types/roles';
 
 export interface Coach {
   id?: number;
   nombre: string;
   telefono: string;
+  rol?: RolType;
   password_hash: string;
   created_at?: Date;
 }
@@ -17,7 +19,7 @@ export const CoachModel = {
   },
 
   async findById(id: number): Promise<Omit<Coach, 'password_hash'> | null> {
-    const [rows] = await pool.query<RowDataPacket[]>('SELECT id, nombre, telefono, created_at FROM coaches WHERE id = ?', [id]);
+    const [rows] = await pool.query<RowDataPacket[]>('SELECT id, nombre, telefono, rol, created_at FROM coaches WHERE id = ?', [id]);
     if (rows.length === 0) return null;
     return rows[0] as Omit<Coach, 'password_hash'>;
   },

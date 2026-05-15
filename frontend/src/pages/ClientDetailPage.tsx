@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
@@ -57,7 +57,7 @@ export const ClientDetailPage = () => {
           <h2 style={{ color: '#e91e63', fontSize: '2.5rem' }}>{client.porcentaje_grasa ? `${client.porcentaje_grasa}%` : '--'}</h2>
         </div>
       </div>
-      
+
       <div className="card">
         <h3 style={{ marginBottom: '1rem', color: 'var(--text-primary)' }}>Información de Contacto</h3>
         <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}><strong>Teléfono:</strong> {client.telefono || 'No registrado'}</p>

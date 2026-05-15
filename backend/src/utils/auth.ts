@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { RolType } from '../types/roles';
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ export const comparePassword = async (password: string, hash: string): Promise<b
   return bcrypt.compare(password, hash);
 };
 
-export const generateToken = (payload: { id: number; telefono: string }): string => {
+export const generateToken = (payload: { id: number; telefono: string; rol: RolType }): string => {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
 };
 

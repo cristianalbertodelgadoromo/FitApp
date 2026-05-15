@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
 import api from '../services/api';
 
 export const ClientFormPage = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     nombre: '',
     telefono: '',
@@ -28,6 +31,7 @@ export const ClientFormPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       await api.post('/clients', {
         nombre: formData.nombre,
@@ -37,15 +41,25 @@ export const ClientFormPage = () => {
         objetivo: formData.objetivo,
         porcentaje_grasa: formData.porcentaje_grasa ? parseFloat(formData.porcentaje_grasa) : null
       });
+      toast.success('Cliente creado con éxito');
       navigate('/dashboard');
     } catch (err) {
       console.error(err);
-      alert('Error al crear el cliente');
+      toast.error('Error al crear el cliente');
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const currentImc = calculatePreviewIMC();
+
   return (
-    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+    <motion.div 
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}
+    >
       <button onClick={() => navigate('/dashboard')} style={{ marginBottom: '1rem', padding: '8px 16px', background: 'transparent', border: '1px solid var(--text-secondary)', borderRadius: 'var(--border-radius)', color: 'var(--text-primary)' }}>← Volver</button>
       <div className="card">
         <h2 style={{ marginBottom: '2rem', color: 'var(--color-primary)' }}>Registrar Nuevo Cliente</h2>
@@ -73,7 +87,11 @@ export const ClientFormPage = () => {
             <div style={{ flex: '1 1 150px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
               <div style={{ padding: '12px', backgroundColor: 'var(--bg-secondary)', borderRadius: 'var(--border-radius)', border: '1px solid #E2E8F0', textAlign: 'center' }}>
                 <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>IMC Estimado: </span>
-                <strong style={{ color: 'var(--color-secondary)' }}>{calculatePreviewIMC()}</strong>
+                {currentImc !== '--' ? (
+                  <strong key={currentImc} className="pop-anim" style={{ display: 'inline-block', color: 'var(--color-secondary)' }}>{currentImc}</strong>
+                ) : (
+                  <strong style={{ color: 'var(--text-secondary)' }}>{currentImc}</strong>
+                )}
               </div>
             </div>
           </div>
@@ -89,9 +107,11 @@ export const ClientFormPage = () => {
             </div>
           </div>
 
-          <button type="submit" className="btn-primary" style={{ marginTop: '1rem' }}>Guardar Cliente</button>
+          <button type="submit" className="btn-primary" style={{ marginTop: '1rem' }} disabled={isLoading}>
+            {isLoading ? <span className="spinner"></span> : 'Guardar Cliente'}
+          </button>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 };
