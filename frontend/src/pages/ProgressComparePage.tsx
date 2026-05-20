@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import { Navbar } from '../components/Navbar';
 
 interface ProgressRecord {
   id: number;
@@ -28,8 +27,8 @@ interface Diferencias {
 
 const DiffBadge = ({ value, unit = 'kg', invertido = false }: { value: number; unit?: string; invertido?: boolean }) => {
   const mejora = invertido ? value < 0 : value < 0;
-  const color = value === 0 ? '#64748b' : mejora ? '#16a34a' : '#dc2626';
-  const bg = value === 0 ? '#f1f5f9' : mejora ? '#dcfce7' : '#fee2e2';
+  const color = value === 0 ? 'var(--color-text-secondary)' : mejora ? '#16a34a' : '#dc2626';
+  const bg = value === 0 ? 'var(--color-border)' : mejora ? '#dcfce7' : '#fee2e2';
   const prefix = value > 0 ? '+' : '';
   return (
     <span style={{ padding: '3px 10px', borderRadius: '99px', backgroundColor: bg, color, fontWeight: 700, fontSize: '0.85rem' }}>
@@ -41,7 +40,7 @@ const DiffBadge = ({ value, unit = 'kg', invertido = false }: { value: number; u
 const MetricRow = ({ label, v1, v2, diff, unit, invertido }: {
   label: string; v1: number; v2: number; diff: number; unit?: string; invertido?: boolean;
 }) => (
-  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem', padding: '0.75rem', borderBottom: '1px solid #f1f5f9', alignItems: 'center' }}>
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem', padding: '0.75rem', borderBottom: '1px solid var(--color-border)', alignItems: 'center' }}>
     <span style={{ fontWeight: 600, fontSize: '0.9rem', color: '#475569' }}>{label}</span>
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <span style={{ fontWeight: 700 }}>{v1 ?? '-'} {unit}</span>
@@ -84,7 +83,7 @@ export const ProgressComparePage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 1.5rem 3rem' }}>
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
           <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '0.9rem', padding: 0, marginBottom: '1rem' }}>
@@ -104,7 +103,7 @@ export const ProgressComparePage = () => {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
                 {[data.registro1, data.registro2].map((record, idx) => (
                   <div key={record.id} className="card" style={{ padding: '1.25rem', textAlign: 'center' }}>
-                    <p style={{ fontWeight: 700, margin: '0 0 1rem', color: idx === 0 ? '#64748b' : 'var(--color-primary)', fontSize: '1rem' }}>
+                    <p style={{ fontWeight: 700, margin: '0 0 1rem', color: idx === 0 ? 'var(--color-text-secondary)' : 'var(--color-primary)', fontSize: '1rem' }}>
                       {idx === 0 ? '◀ Antes' : 'Después ▶'} · {record.fecha}
                     </p>
                     {record.foto_frente_url ? (
@@ -117,7 +116,7 @@ export const ProgressComparePage = () => {
                       </div>
                     ) : (
 
-                      <div style={{ height: '100px', backgroundColor: '#f1f5f9', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                      <div style={{ height: '100px', backgroundColor: 'var(--color-border)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
                         Sin fotos
                       </div>
                     )}
@@ -127,9 +126,9 @@ export const ProgressComparePage = () => {
 
               {/* Métricas comparadas */}
               <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-                <div style={{ padding: '1rem 1.25rem', backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
-                  <span style={{ fontWeight: 700, color: '#1e293b' }}>Métrica</span>
-                  <span style={{ fontWeight: 700, color: '#64748b', textAlign: 'center' }}>Antes</span>
+                <div style={{ padding: '1rem 1.25rem', backgroundColor: 'var(--color-bg)', borderBottom: '1px solid var(--color-border)', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
+                  <span style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>Métrica</span>
+                  <span style={{ fontWeight: 700, color: 'var(--color-text-secondary)', textAlign: 'center' }}>Antes</span>
                   <span style={{ fontWeight: 700, color: 'var(--color-primary)', textAlign: 'center' }}>Después</span>
                 </div>
                 <MetricRow label="⚖️ Peso" v1={data.registro1.peso_kg} v2={data.registro2.peso_kg} diff={data.diferencias.peso} unit="kg" invertido />
@@ -144,7 +143,7 @@ export const ProgressComparePage = () => {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1.5rem' }}>
                   {[data.registro1, data.registro2].map((record) => record.notas ? (
                     <div key={record.id} className="card" style={{ padding: '1rem' }}>
-                      <p style={{ margin: 0, fontStyle: 'italic', color: '#64748b', fontSize: '0.9rem' }}>
+                      <p style={{ margin: 0, fontStyle: 'italic', color: 'var(--color-text-secondary)', fontSize: '0.9rem' }}>
                         💬 {record.notas}
                       </p>
                       <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{record.fecha}</span>

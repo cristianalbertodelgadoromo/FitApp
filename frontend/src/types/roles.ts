@@ -1,7 +1,8 @@
 export enum Rol {
-  SysAdmin = 'sysadmin',
+  SysAdmin = 'admin',
   Coach    = 'coach',
-  Cliente  = 'cliente'
+  Cliente  = 'client',
+  Nutritionist = 'nutritionist'
 }
 
 export type RolType = `${Rol}`;

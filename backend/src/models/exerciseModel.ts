@@ -7,6 +7,7 @@ export interface Exercise {
   grupo_muscular?: string;
   tipo?: string;
   nivel?: string;
+  descripcion?: string;
 }
 
 export const ExerciseModel = {
@@ -27,10 +28,25 @@ export const ExerciseModel = {
     return rows as Exercise[];
   },
 
+  async findById(id: number): Promise<Exercise | null> {
+    const [rows] = await pool.query<RowDataPacket[]>(
+      'SELECT * FROM exercises WHERE id = ?',
+      [id]
+    );
+    if (rows.length === 0) return null;
+    return rows[0] as Exercise;
+  },
+
   async create(exercise: Exercise): Promise<number> {
     const [result] = await pool.query<ResultSetHeader>(
-      'INSERT INTO exercises (nombre, grupo_muscular, tipo, nivel) VALUES (?, ?, ?, ?)',
-      [exercise.nombre, exercise.grupo_muscular, exercise.tipo, exercise.nivel]
+      'INSERT INTO exercises (nombre, grupo_muscular, tipo, nivel, descripcion) VALUES (?, ?, ?, ?, ?)',
+      [
+        exercise.nombre,
+        exercise.grupo_muscular ?? null,
+        exercise.tipo ?? null,
+        exercise.nivel ?? null,
+        exercise.descripcion ?? null
+      ]
     );
     return result.insertId;
   }

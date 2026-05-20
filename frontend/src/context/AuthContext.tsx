@@ -1,78 +1,85 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Rol, RolType } from '../types/roles';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import api from '../services/api';
 
-interface User {
+interface AuthUser {
   id: number;
   nombre: string;
-  telefono: string;
-  rol: RolType;
-  token: string;
+  email: string;
+  rol: 'admin' | 'coach' | 'client' | 'nutritionist';
 }
 
 interface AuthContextType {
-  user: User | null;
-  login: (token: string) => void;
+  user: AuthUser | null;
+  token: string | null;
+  login: (token: string) => Promise<void>;
   logout: () => void;
+  loading: boolean;
   esAdmin: () => boolean;
   esCoach: () => boolean;
   esCliente: () => boolean;
+  esNutritionist: () => boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser]   = useState<AuthUser | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
+  // Al montar: verificar si hay token guardado y validarlo contra el servidor
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
-    if (storedToken && storedUser) {
-      setUser(JSON.parse(storedUser));
+    const savedToken = localStorage.getItem('token');
+    if (savedToken && savedToken !== 'undefined') {
+      // Validar el token contra GET /api/auth/me
+      api.get('/auth/me', {
+        headers: { Authorization: `Bearer ${savedToken}` }
+      })
+        .then(res => {
+          setToken(savedToken);
+          setUser(res.data.user);   // { id, nombre, email, rol }
+        })
+        .catch(() => {
+          // Token inválido o expirado — limpiar
+          localStorage.removeItem('token');
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
   }, []);
 
-  const login = (token: string) => {
-    try {
-      const payloadBase64 = token.split('.')[1];
-      const decodedPayload = JSON.parse(atob(payloadBase64));
-      
-      const userData: User = {
-        id: decodedPayload.id,
-        nombre: decodedPayload.nombre || '', // El backend puede no enviarlo en el payload, pero lo guardamos si viene
-        telefono: decodedPayload.telefono,
-        rol: decodedPayload.rol,
-        token
-      };
-
-      setUser(userData);
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(userData));
-    } catch (error) {
-      console.error('Error decodificando token:', error);
-    }
+  const login = async (newToken: string) => {
+    localStorage.setItem('token', newToken);
+    setToken(newToken);
+    // Obtener perfil real desde el servidor (no decodificar el JWT en el cliente)
+    const res = await api.get('/auth/me', {
+      headers: { Authorization: `Bearer ${newToken}` }
+    });
+    setUser(res.data.user);
   };
 
   const logout = () => {
-    setUser(null);
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    setToken(null);
+    setUser(null);
   };
 
-  const esAdmin = () => user?.rol === Rol.SysAdmin;
-  const esCoach = () => user?.rol === Rol.Coach;
-  const esCliente = () => user?.rol === Rol.Cliente;
-
   return (
-    <AuthContext.Provider value={{ user, login, logout, esAdmin, esCoach, esCliente }}>
+    <AuthContext.Provider value={{
+      user, token, login, logout, loading,
+      esAdmin:        () => user?.rol === 'admin',
+      esCoach:        () => user?.rol === 'coach',
+      esCliente:      () => user?.rol === 'client',
+      esNutritionist: () => user?.rol === 'nutritionist',
+    }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth debe ser usado dentro de un AuthProvider');
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth debe usarse dentro de AuthProvider');
+  return ctx;
 };

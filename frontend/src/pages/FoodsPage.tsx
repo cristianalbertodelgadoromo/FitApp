@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../services/api';
-import { Navbar } from '../components/Navbar';
 
 export const FoodsPage = () => {
   const [foods, setFoods] = useState<any[]>([]);
@@ -45,8 +44,8 @@ export const FoodsPage = () => {
       setShowForm(false);
       setFormData({ nombre: '', calorias_por_100g: '', proteinas: '', carbohidratos: '', grasas: '' });
       fetchFoods(search);
-    } catch (err) {
-      toast.error('Error al crear alimento');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Error al guardar el alimento');
     } finally {
       setIsLoading(false);
     }
@@ -54,7 +53,7 @@ export const FoodsPage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} style={{ padding: '0 2rem', maxWidth: '1200px', margin: '0 auto' }}>
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
           <h1 style={{ color: 'var(--color-primary)' }}>Base de Alimentos</h1>
@@ -92,7 +91,7 @@ export const FoodsPage = () => {
               <p style={{ color: 'var(--text-secondary)' }}><strong>{food.calorias_por_100g} kcal</strong> / 100g</p>
               <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', fontSize: '0.9rem' }}>
                 <span style={{ color: '#e91e63', fontWeight: 600 }}>Prot: {food.proteinas}g</span>
-                <span style={{ color: '#1A73E8', fontWeight: 600 }}>Carb: {food.carbohidratos}g</span>
+                <span style={{ color: 'var(--color-primary-dark)', fontWeight: 600 }}>Carb: {food.carbohidratos}g</span>
                 <span style={{ color: '#ff9800', fontWeight: 600 }}>Grasa: {food.grasas}g</span>
               </div>
             </motion.div>

@@ -8,15 +8,23 @@ export interface FoodLog {
   tipo_comida: string;
   food_id: number;
   cantidad_g: number;
-  calorias_consumidas?: number;
+  created_at?: Date;
 }
 
-export interface FoodLogWithDetails extends FoodLog {
-  food_nombre: string;
-  calorias_por_100g: number;
-  proteinas: number;
-  carbohidratos: number;
-  grasas: number;
+export interface FoodLogWithDetails {
+  id: number;
+  client_id: number;
+  cliente: string;
+  fecha: string;
+  tipo_comida: string;
+  cantidad_g: number;
+  alimento: string;
+  unidad: string;
+  calorias_kcal: number;
+  proteinas_g: number;
+  carbohidratos_g: number;
+  grasas_g: number;
+  created_at: Date;
 }
 
 export interface FoodLogGrouped {
@@ -31,14 +39,7 @@ export const FoodLogModel = {
     total_calorias: number;
   }> {
     const [rows] = await pool.query<RowDataPacket[]>(
-      `SELECT fl.id, fl.client_id, fl.fecha, fl.tipo_comida, fl.food_id,
-              fl.cantidad_g, fl.calorias_consumidas,
-              f.nombre AS food_nombre, f.calorias_por_100g,
-              f.proteinas, f.carbohidratos, f.grasas
-       FROM food_logs fl
-       JOIN foods f ON fl.food_id = f.id
-       WHERE fl.client_id = ? AND fl.fecha = ?
-       ORDER BY fl.tipo_comida, fl.id`,
+      `SELECT * FROM v_food_logs_detalle WHERE client_id = ? AND fecha = ?`,
       [clientId, fecha]
     );
 
@@ -48,13 +49,13 @@ export const FoodLogModel = {
     for (const row of rows as FoodLogWithDetails[]) {
       const tipo = row.tipo_comida || 'Snack';
       if (!mapaGrupos[tipo]) mapaGrupos[tipo] = [];
-      mapaGrupos[tipo].push(row as FoodLogWithDetails);
+      mapaGrupos[tipo].push(row);
     }
 
     const grupos: FoodLogGrouped[] = tiposOrden.map((tipo) => {
       const items = mapaGrupos[tipo] || [];
       const subtotal_calorias = items.reduce(
-        (sum, item) => sum + Number(item.calorias_consumidas || 0),
+        (sum, item) => sum + Number(item.calorias_kcal || 0),
         0
       );
       return { tipo_comida: tipo, items, subtotal_calorias: parseFloat(subtotal_calorias.toFixed(2)) };
@@ -69,21 +70,16 @@ export const FoodLogModel = {
 
   async create(log: FoodLog): Promise<number> {
     const [foodRows] = await pool.query<RowDataPacket[]>(
-      'SELECT calorias_por_100g FROM foods WHERE id = ?',
+      'SELECT id FROM foods WHERE id = ?',
       [log.food_id]
     );
 
     if (foodRows.length === 0) throw new Error('Alimento no encontrado');
 
-    const calorias_por_100g = Number(foodRows[0].calorias_por_100g);
-    const calorias_consumidas = parseFloat(
-      ((log.cantidad_g * calorias_por_100g) / 100).toFixed(2)
-    );
-
     const [result] = await pool.query<ResultSetHeader>(
-      `INSERT INTO food_logs (client_id, fecha, tipo_comida, food_id, cantidad_g, calorias_consumidas)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [log.client_id, log.fecha, log.tipo_comida, log.food_id, log.cantidad_g, calorias_consumidas]
+      `INSERT INTO food_logs (client_id, food_id, fecha, tipo_comida, cantidad_g)
+       VALUES (?, ?, ?, ?, ?)`,
+      [log.client_id, log.food_id, log.fecha, log.tipo_comida, log.cantidad_g]
     );
 
     return result.insertId;
@@ -106,10 +102,7 @@ export const FoodLogModel = {
   },
 
   async getClientObjetivoCalorico(clientId: number): Promise<number> {
-    const [rows] = await pool.query<RowDataPacket[]>(
-      'SELECT objetivo_calorico FROM clients WHERE id = ?',
-      [clientId]
-    );
-    return rows.length > 0 ? Number(rows[0].objetivo_calorico) || 2000 : 2000;
+    // client_profiles no tiene objetivo_calorico, devolvemos un valor estándar (2000 kcal)
+    return 2000;
   }
 };

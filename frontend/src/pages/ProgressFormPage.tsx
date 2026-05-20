@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../services/api';
-import { Navbar } from '../components/Navbar';
 
 interface PhotoPreview {
   file: File;
@@ -80,7 +79,7 @@ export const ProgressFormPage = () => {
           height: '160px',
           borderRadius: '12px',
           border: `2px dashed ${preview ? 'var(--color-primary)' : '#cbd5e1'}`,
-          backgroundColor: preview ? '#f0fdf4' : '#f8fafc',
+          backgroundColor: preview ? '#f0fdf4' : 'var(--color-bg)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -105,7 +104,7 @@ export const ProgressFormPage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div style={{ maxWidth: '700px', margin: '0 auto', padding: '0 1.5rem 3rem' }}>
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
           <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '0.9rem', padding: 0, marginBottom: '1rem' }}>
@@ -116,7 +115,7 @@ export const ProgressFormPage = () => {
           <form onSubmit={handleSubmit}>
             {/* Medidas */}
             <div className="card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
-              <h3 style={{ marginTop: 0, color: '#1e293b' }}>Medidas corporales</h3>
+              <h3 style={{ marginTop: 0, color: 'var(--color-text-primary)' }}>Medidas corporales</h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
                 <div>
                   <label style={labelStyle}>Fecha</label>
@@ -149,7 +148,7 @@ export const ProgressFormPage = () => {
 
             {/* Fotos */}
             <div className="card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
-              <h3 style={{ marginTop: 0, color: '#1e293b' }}>Fotos de progreso</h3>
+              <h3 style={{ marginTop: 0, color: 'var(--color-text-primary)' }}>Fotos de progreso</h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
                 <PhotoInput label="Frente" preview={photoFrente} onChange={handlePhoto(setPhotoFrente)} id="photo-frente" />
                 <PhotoInput label="Espalda" preview={photoEspalda} onChange={handlePhoto(setPhotoEspalda)} id="photo-espalda" />
@@ -170,7 +169,7 @@ export const ProgressFormPage = () => {
 const inputStyle: React.CSSProperties = {
   padding: '10px 14px',
   borderRadius: '8px',
-  border: '1px solid #e2e8f0',
+  border: '1px solid var(--color-border)',
   fontSize: '0.95rem',
   outline: 'none',
   width: '100%',

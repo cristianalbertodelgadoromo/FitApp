@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import api from '../services/api';
-import { Navbar } from '../components/Navbar';
+
 import { useAuth } from '../context/AuthContext';
 
 interface RoutineExercise {
@@ -53,7 +53,7 @@ export const MyRoutinePage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 1.5rem 3rem' }}>
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
           <h1 style={{ color: 'var(--color-primary)', marginBottom: '2rem' }}>🏋️ Mi Rutina</h1>
@@ -82,7 +82,7 @@ export const MyRoutinePage = () => {
                   <span style={{
                     padding: '3px 12px',
                     borderRadius: '99px',
-                    backgroundColor: '#d1fae5',
+                    backgroundColor: 'var(--color-primary-light)',
                     color: '#065f46',
                     fontSize: '0.85rem',
                     fontWeight: 700,
@@ -116,7 +116,7 @@ export const MyRoutinePage = () => {
                         minWidth: '32px',
                         height: '32px',
                         borderRadius: '50%',
-                        background: 'linear-gradient(135deg, var(--color-primary), #059669)',
+                        background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))',
                         color: '#fff',
                         display: 'flex',
                         alignItems: 'center',
@@ -128,7 +128,7 @@ export const MyRoutinePage = () => {
                         {ex.orden}
                       </span>
                       <div>
-                        <h4 style={{ margin: '0 0 0.4rem', fontSize: '1rem', color: '#1e293b' }}>
+                        <h4 style={{ margin: '0 0 0.4rem', fontSize: '1rem', color: 'var(--color-text-primary)' }}>
                           {ex.nombre || ex.nombre_libre || `Ejercicio #${ex.exercise_id}`}
                         </h4>
                         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
@@ -149,7 +149,7 @@ export const MyRoutinePage = () => {
                           )}
                         </div>
                         {ex.notas && (
-                          <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: '#64748b', fontStyle: 'italic' }}>
+                          <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
                             💬 {ex.notas}
                           </p>
                         )}

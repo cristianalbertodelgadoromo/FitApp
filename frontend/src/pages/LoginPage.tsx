@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../services/api';
-
+import { useAuth } from '../context/AuthContext';
 export const LoginPage = () => {
   const [telefono, setTelefono] = useState('');
   const [password, setPassword] = useState('');
@@ -11,12 +11,13 @@ export const LoginPage = () => {
   const [shake, setShake] = useState(false);
   const navigate = useNavigate();
 
+  const { login } = useAuth();
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
       const res = await api.post('/auth/login', { telefono, password });
-      localStorage.setItem('token', res.data.token);
+      await login(res.data.data.token);
       toast.success('¡Bienvenido a FitApp!');
       navigate('/dashboard');
     } catch (err: any) {
@@ -38,12 +39,12 @@ export const LoginPage = () => {
         style={{ maxWidth: '400px', width: '100%', textAlign: 'center', padding: '40px' }}
       >
         <h1 style={{ color: 'var(--color-primary)', marginBottom: '1rem', fontSize: '2.5rem' }}>FitApp</h1>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>Ingresa con tu número y contraseña</p>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>Ingresa con tu correo, teléfono y contraseña</p>
         
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
           <input 
-            type="tel" 
-            placeholder="Número de Teléfono" 
+            type="text" 
+            placeholder="Correo Electrónico o Teléfono" 
             value={telefono}
             onChange={(e) => setTelefono(e.target.value)}
             style={{ padding: '16px', borderRadius: 'var(--border-radius)', border: '1px solid #ccc', width: '100%' }}

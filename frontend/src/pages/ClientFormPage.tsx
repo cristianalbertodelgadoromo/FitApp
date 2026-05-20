@@ -85,7 +85,7 @@ export const ClientFormPage = () => {
               <input type="number" step="0.1" name="altura" value={formData.altura} onChange={handleChange} style={{ width: '100%', padding: '12px', borderRadius: 'var(--border-radius)', border: '1px solid #ccc' }} />
             </div>
             <div style={{ flex: '1 1 150px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-              <div style={{ padding: '12px', backgroundColor: 'var(--bg-secondary)', borderRadius: 'var(--border-radius)', border: '1px solid #E2E8F0', textAlign: 'center' }}>
+              <div style={{ padding: '12px', backgroundColor: 'var(--bg-secondary)', borderRadius: 'var(--border-radius)', border: '1px solid var(--color-border)', textAlign: 'center' }}>
                 <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>IMC Estimado: </span>
                 {currentImc !== '--' ? (
                   <strong key={currentImc} className="pop-anim" style={{ display: 'inline-block', color: 'var(--color-secondary)' }}>{currentImc}</strong>

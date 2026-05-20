@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../services/api';
-import { Navbar } from '../components/Navbar';
+
 import { useAuth } from '../context/AuthContext';
 
 interface Post {
@@ -71,7 +71,7 @@ export const CommunityPage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 1.5rem 4rem' }}>
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
           <div>
@@ -176,7 +176,7 @@ export const CommunityPage = () => {
                   </div>
                   <h2 style={{ margin: '0 0 1rem', fontSize: '1.5rem' }}>{post.titulo}</h2>
                   <p style={{ color: '#475569', whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>{post.contenido}</p>
-                  <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Por <strong>{post.coach_nombre}</strong></span>
                     <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{new Date(post.created_at).toLocaleDateString()}</span>
                   </div>
@@ -193,7 +193,7 @@ export const CommunityPage = () => {
 const inputStyle: React.CSSProperties = {
   padding: '12px 16px',
   borderRadius: '12px',
-  border: '1px solid #e2e8f0',
+  border: '1px solid var(--color-border)',
   fontSize: '1rem',
   outline: 'none',
   width: '100%',

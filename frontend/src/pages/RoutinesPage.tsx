@@ -3,8 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../services/api';
-import { Navbar } from '../components/Navbar';
-import { useAuth } from '../context/AuthContext';
 
 interface Client {
   id: number;
@@ -22,7 +20,6 @@ interface Routine {
 
 export const RoutinesPage = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [routines, setRoutines] = useState<Routine[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -88,7 +85,7 @@ export const RoutinesPage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 1.5rem 3rem' }}>
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
           <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
@@ -173,8 +170,8 @@ export const RoutinesPage = () => {
                     borderRadius: '99px',
                     fontSize: '0.8rem',
                     fontWeight: 700,
-                    backgroundColor: routine.activa ? '#d1fae5' : '#f1f5f9',
-                    color: routine.activa ? '#065f46' : '#64748b',
+                    backgroundColor: routine.activa ? 'var(--color-primary-light)' : 'var(--color-border)',
+                    color: routine.activa ? '#065f46' : 'var(--color-text-secondary)',
                   }}>
                     {routine.activa ? '✓ Activa' : 'Inactiva'}
                   </span>
@@ -191,7 +188,7 @@ export const RoutinesPage = () => {
 const inputStyle: React.CSSProperties = {
   padding: '10px 14px',
   borderRadius: '8px',
-  border: '1px solid #e2e8f0',
+  border: '1px solid var(--color-border)',
   fontSize: '0.95rem',
   outline: 'none',
   width: '100%',

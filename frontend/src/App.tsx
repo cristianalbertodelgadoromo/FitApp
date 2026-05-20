@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
@@ -8,26 +7,34 @@ import { ClientFormPage } from './pages/ClientFormPage';
 import { ClientDetailPage } from './pages/ClientDetailPage';
 import { FoodsPage } from './pages/FoodsPage';
 import { ExercisesPage } from './pages/ExercisesPage';
-// Módulo 1 — Contador de Calorías
 import { FoodLogPage } from './pages/FoodLogPage';
-// Módulo 2 — Rutinas
 import { RoutinesPage } from './pages/RoutinesPage';
 import { RoutineDetailPage } from './pages/RoutineDetailPage';
 import { MyRoutinePage } from './pages/MyRoutinePage';
-// Módulo 3 — Avance Quincenal
 import { ProgressPage } from './pages/ProgressPage';
 import { ProgressFormPage } from './pages/ProgressFormPage';
 import { ProgressComparePage } from './pages/ProgressComparePage';
 import { CommunityPage } from './pages/CommunityPage';
 import { CoachProfilePage } from './pages/CoachProfilePage';
 import { PaymentsPage } from './pages/PaymentsPage';
+import Layout from './components/Layout';
+import { useAuth } from './context/AuthContext';
 
-const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
+const PrivateRoute = ({ children, roles }: { children: JSX.Element; roles?: string[] }) => {
+  const { user, loading } = useAuth();
 
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', flexDirection: 'column', gap: '1rem' }}>
+        <div className="spinner"></div>
+        <p style={{ color: 'var(--color-text-secondary)', fontWeight: 500 }}>Cargando sistema...</p>
+      </div>
+    );
+  }
+  if (!user) return <Navigate to="/login" replace />;
+  if (roles && !roles.includes(user.rol)) return <Navigate to="/dashboard" replace />;
 
-
-  const token = localStorage.getItem('token');
-  return token ? <>{children}</> : <Navigate to="/login" />;
+  return children;
 };
 
 function App() {
@@ -38,32 +45,19 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
 
-          <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
-          <Route path="/clients/new" element={<PrivateRoute><ClientFormPage /></PrivateRoute>} />
-          <Route path="/clients/:id" element={<PrivateRoute><ClientDetailPage /></PrivateRoute>} />
-          <Route path="/foods" element={<PrivateRoute><FoodsPage /></PrivateRoute>} />
-          <Route path="/exercises" element={<PrivateRoute><ExercisesPage /></PrivateRoute>} />
-
-          {/* Módulo 1 — Contador de Calorías */}
-          <Route path="/food-log" element={<PrivateRoute><FoodLogPage /></PrivateRoute>} />
-
-          {/* Módulo 2 — Rutinas */}
-          <Route path="/routines" element={<PrivateRoute><RoutinesPage /></PrivateRoute>} />
-          <Route path="/routines/:id" element={<PrivateRoute><RoutineDetailPage /></PrivateRoute>} />
-          <Route path="/my-routine" element={<PrivateRoute><MyRoutinePage /></PrivateRoute>} />
-
-          {/* Módulo 3 — Avance Quincenal */}
-          <Route path="/progress/:clientId" element={<PrivateRoute><ProgressPage /></PrivateRoute>} />
-          <Route path="/progress/new/:clientId" element={<PrivateRoute><ProgressFormPage /></PrivateRoute>} />
-          <Route path="/progress/compare" element={<PrivateRoute><ProgressComparePage /></PrivateRoute>} />
-          <Route path="/community" element={<PrivateRoute><CommunityPage /></PrivateRoute>} />
-          <Route path="/my-coach" element={<PrivateRoute><CoachProfilePage /></PrivateRoute>} />
-          <Route path="/payments" element={<PrivateRoute><PaymentsPage /></PrivateRoute>} />
-
-          <Route path="*" element={<Navigate to="/dashboard" />} />
-
-
-
+          <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/foods" element={<PrivateRoute roles={['admin', 'nutritionist', 'coach']}><FoodsPage /></PrivateRoute>} />
+            <Route path="/exercises" element={<PrivateRoute roles={['admin', 'coach']}><ExercisesPage /></PrivateRoute>} />
+            <Route path="/food-log" element={<FoodLogPage />} />
+            <Route path="/routines" element={<PrivateRoute roles={['admin', 'coach', 'client']}><RoutinesPage /></PrivateRoute>} />
+            <Route path="/routines/:id" element={<PrivateRoute roles={['admin', 'coach', 'client']}><RoutineDetailPage /></PrivateRoute>} />
+            <Route path="/my-routine" element={<PrivateRoute roles={['client']}><MyRoutinePage /></PrivateRoute>} />
+            <Route path="/community" element={<CommunityPage />} />
+            <Route path="/my-coach" element={<PrivateRoute roles={['client']}><CoachProfilePage /></PrivateRoute>} />
+            <Route path="/payments" element={<PaymentsPage />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>

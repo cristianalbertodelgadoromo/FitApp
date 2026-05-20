@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../services/api';
-import { Navbar } from '../components/Navbar';
 
 interface RoutineExercise {
   id: number;
@@ -170,7 +169,7 @@ export const RoutineDetailPage = () => {
   if (isLoading) {
     return (
       <>
-        <Navbar />
+        
         <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-secondary)' }}>Cargando rutina...</div>
       </>
     );
@@ -179,7 +178,7 @@ export const RoutineDetailPage = () => {
   if (!routine) {
     return (
       <>
-        <Navbar />
+        
         <div style={{ textAlign: 'center', padding: '4rem' }}>
           <p>Rutina no encontrada.</p>
           <button onClick={() => navigate('/routines')} className="btn-primary" style={{ width: 'auto' }}>Volver</button>
@@ -190,7 +189,7 @@ export const RoutineDetailPage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 1.5rem 3rem' }}>
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
@@ -213,9 +212,9 @@ export const RoutineDetailPage = () => {
                 style={{
                   padding: '8px 16px',
                   borderRadius: '99px',
-                  border: `2px solid ${routine.activa ? '#10b981' : '#94a3b8'}`,
-                  backgroundColor: routine.activa ? '#d1fae5' : 'transparent',
-                  color: routine.activa ? '#065f46' : '#64748b',
+                  border: `2px solid ${routine.activa ? 'var(--color-primary)' : '#94a3b8'}`,
+                  backgroundColor: routine.activa ? 'var(--color-primary-light)' : 'transparent',
+                  color: routine.activa ? '#065f46' : 'var(--color-text-secondary)',
                   cursor: 'pointer',
                   fontWeight: 700,
                   fontSize: '0.9rem',
@@ -257,8 +256,8 @@ export const RoutineDetailPage = () => {
                       border: 'none',
                       cursor: 'pointer',
                       fontWeight: 600,
-                      backgroundColor: addTab === tab ? 'var(--color-primary)' : '#f1f5f9',
-                      color: addTab === tab ? '#fff' : '#64748b',
+                      backgroundColor: addTab === tab ? 'var(--color-primary)' : 'var(--color-border)',
+                      color: addTab === tab ? '#fff' : 'var(--color-text-secondary)',
                       transition: 'all 0.2s',
                     }}
                   >
@@ -277,13 +276,13 @@ export const RoutineDetailPage = () => {
                     style={{ ...inputStyle, marginBottom: '0.5rem' }}
                   />
                   {!selectedExercise && catalogItems.length > 0 && (
-                    <div style={{ maxHeight: '160px', overflowY: 'auto', border: '1px solid #e2e8f0', borderRadius: '8px', marginBottom: '1rem' }}>
+                    <div style={{ maxHeight: '160px', overflowY: 'auto', border: '1px solid var(--color-border)', borderRadius: '8px', marginBottom: '1rem' }}>
                       {catalogItems.slice(0, 6).map((ex) => (
                         <button
                           key={ex.id}
                           onClick={() => { setSelectedExercise(ex); setCatalogSearch(ex.nombre); }}
-                          style={{ width: '100%', textAlign: 'left', padding: '0.6rem 1rem', border: 'none', borderBottom: '1px solid #f1f5f9', backgroundColor: 'transparent', cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
-                          onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#f8fafc')}
+                          style={{ width: '100%', textAlign: 'left', padding: '0.6rem 1rem', border: 'none', borderBottom: '1px solid var(--color-border)', backgroundColor: 'transparent', cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
+                          onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--color-bg)')}
                           onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
                         >
                           <span style={{ fontWeight: 500 }}>{ex.nombre}</span>
@@ -368,7 +367,7 @@ export const RoutineDetailPage = () => {
                     {ex.orden}
                   </span>
                   <div>
-                    <h4 style={{ margin: '0 0 0.25rem', color: '#1e293b' }}>
+                    <h4 style={{ margin: '0 0 0.25rem', color: 'var(--color-text-primary)' }}>
                       {ex.nombre || ex.nombre_libre || `Ejercicio #${ex.exercise_id}`}
                     </h4>
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -377,7 +376,7 @@ export const RoutineDetailPage = () => {
                       {ex.duracion_min && <span>⏱ {ex.duracion_min} min</span>}
                     </div>
                     {ex.notas && (
-                      <p style={{ margin: '0.4rem 0 0', fontSize: '0.85rem', color: '#64748b', fontStyle: 'italic' }}>
+                      <p style={{ margin: '0.4rem 0 0', fontSize: '0.85rem', color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
                         {ex.notas}
                       </p>
                     )}
@@ -404,7 +403,7 @@ export const RoutineDetailPage = () => {
 const inputStyle: React.CSSProperties = {
   padding: '10px 14px',
   borderRadius: '8px',
-  border: '1px solid #e2e8f0',
+  border: '1px solid var(--color-border)',
   fontSize: '0.95rem',
   outline: 'none',
   width: '100%',

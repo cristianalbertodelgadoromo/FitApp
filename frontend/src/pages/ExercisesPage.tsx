@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../services/api';
-import { Navbar } from '../components/Navbar';
 
 export const ExercisesPage = () => {
   const [exercises, setExercises] = useState<any[]>([]);
@@ -43,8 +42,8 @@ export const ExercisesPage = () => {
       setShowForm(false);
       setFormData({ nombre: '', grupo_muscular: '', tipo: '', nivel: '' });
       fetchExercises(grupoFilter, nivelFilter);
-    } catch (err) {
-      toast.error('Error al crear ejercicio');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Error al guardar el ejercicio');
     } finally {
       setIsLoading(false);
     }
@@ -52,7 +51,7 @@ export const ExercisesPage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} style={{ padding: '0 2rem', maxWidth: '1200px', margin: '0 auto' }}>
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
           <h1 style={{ color: 'var(--color-primary)' }}>Catálogo de Ejercicios</h1>
@@ -106,7 +105,7 @@ export const ExercisesPage = () => {
               <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}><strong>Grupo:</strong> {exercise.grupo_muscular || 'N/A'}</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
                 <span style={{ fontSize: '0.9rem', color: '#636E72', backgroundColor: '#F4F7F6', padding: '4px 8px', borderRadius: '4px' }}>{exercise.tipo || 'General'}</span>
-                <span style={{ fontSize: '0.9rem', fontWeight: 600, color: exercise.nivel === 'Avanzado' ? '#e91e63' : exercise.nivel === 'Intermedio' ? '#ff9800' : '#28A745' }}>
+                <span style={{ fontSize: '0.9rem', fontWeight: 600, color: exercise.nivel === 'Avanzado' ? '#e91e63' : exercise.nivel === 'Intermedio' ? '#ff9800' : 'var(--color-primary)' }}>
                   {exercise.nivel || 'N/A'}
                 </span>
               </div>

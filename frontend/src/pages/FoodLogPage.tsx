@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../services/api';
-import { Navbar } from '../components/Navbar';
+
 import { useAuth } from '../context/AuthContext';
 
 interface FoodItem {
@@ -47,7 +47,7 @@ const TIPO_ICONS: Record<string, string> = {
 
 const TIPO_COLORS: Record<string, string> = {
   Desayuno: '#f59e0b',
-  Almuerzo: '#10b981',
+  Almuerzo: 'var(--color-primary)',
   Cena: '#6366f1',
   Snack: '#ec4899',
 };
@@ -166,11 +166,11 @@ export const FoodLogPage = () => {
     : 0;
 
   const progressPct = dayData ? Math.min(dayData.porcentaje, 100) : 0;
-  const progressColor = progressPct >= 100 ? '#ef4444' : progressPct >= 80 ? '#f59e0b' : '#10b981';
+  const progressColor = progressPct >= 100 ? '#ef4444' : progressPct >= 80 ? '#f59e0b' : 'var(--color-primary)';
 
   return (
     <>
-      <Navbar />
+      
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 1.5rem 3rem' }}>
 
         {/* Header — navegación de fecha */}
@@ -334,8 +334,8 @@ export const FoodLogPage = () => {
                             alignItems: 'center',
                             padding: '0.6rem 0.75rem',
                             borderRadius: '8px',
-                            backgroundColor: '#f8fafc',
-                            border: '1px solid #e2e8f0',
+                            backgroundColor: 'var(--color-bg)',
+                            border: '1px solid var(--color-border)',
                           }}
                         >
                           <div>
@@ -423,9 +423,9 @@ export const FoodLogPage = () => {
                     style={{
                       padding: '5px 12px',
                       borderRadius: '99px',
-                      border: `1px solid ${modalTipo === t ? TIPO_COLORS[t] : '#e2e8f0'}`,
+                      border: `1px solid ${modalTipo === t ? TIPO_COLORS[t] : 'var(--color-border)'}`,
                       backgroundColor: modalTipo === t ? `${TIPO_COLORS[t]}18` : 'transparent',
-                      color: modalTipo === t ? TIPO_COLORS[t] : '#64748b',
+                      color: modalTipo === t ? TIPO_COLORS[t] : 'var(--color-text-secondary)',
                       cursor: 'pointer',
                       fontWeight: modalTipo === t ? 700 : 400,
                       fontSize: '0.85rem',
@@ -451,7 +451,7 @@ export const FoodLogPage = () => {
                 <div style={{
                   maxHeight: '180px',
                   overflowY: 'auto',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '8px',
                   marginTop: '0.5rem',
                   marginBottom: '1rem',
@@ -467,12 +467,12 @@ export const FoodLogPage = () => {
                         border: 'none',
                         backgroundColor: 'transparent',
                         cursor: 'pointer',
-                        borderBottom: '1px solid #f1f5f9',
+                        borderBottom: '1px solid var(--color-border)',
                         display: 'flex',
                         justifyContent: 'space-between',
                         transition: 'background 0.15s',
                       }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#f8fafc')}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--color-bg)')}
                       onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
                     >
                       <span style={{ fontWeight: 500 }}>{food.nombre}</span>
@@ -511,7 +511,7 @@ export const FoodLogPage = () => {
                     style={inputStyle}
                   />
                   {parseFloat(cantidad) > 0 && (
-                    <p style={{ margin: '0.5rem 0 1rem', color: '#10b981', fontWeight: 700, fontSize: '1rem' }}>
+                    <p style={{ margin: '0.5rem 0 1rem', color: 'var(--color-primary)', fontWeight: 700, fontSize: '1rem' }}>
                       ≈ {previewCal} kcal
                     </p>
                   )}
@@ -538,7 +538,7 @@ const navBtnStyle: React.CSSProperties = {
   width: '40px',
   height: '40px',
   borderRadius: '50%',
-  border: '1px solid #e2e8f0',
+  border: '1px solid var(--color-border)',
   backgroundColor: '#fff',
   fontSize: '1.8rem',
   cursor: 'pointer',
@@ -554,7 +554,7 @@ const inputStyle: React.CSSProperties = {
   width: '100%',
   padding: '10px 14px',
   borderRadius: '8px',
-  border: '1px solid #e2e8f0',
+  border: '1px solid var(--color-border)',
   fontSize: '0.95rem',
   outline: 'none',
   boxSizing: 'border-box',

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import api from '../services/api';
-import { Navbar } from '../components/Navbar';
 
 interface Coach {
   id: number;
@@ -37,7 +36,7 @@ export const CoachProfilePage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div style={{ maxWidth: '600px', margin: '0 auto', padding: '0 1.5rem 4rem' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -73,11 +72,11 @@ export const CoachProfilePage = () => {
               <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>Tu entrenador personal en FitApp</p>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', backgroundColor: '#f8fafc', borderRadius: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', backgroundColor: 'var(--color-bg)', borderRadius: '12px' }}>
                   <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>Teléfono</span>
                   <span style={{ fontWeight: 700 }}>{coach.telefono}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', backgroundColor: '#f8fafc', borderRadius: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', backgroundColor: 'var(--color-bg)', borderRadius: '12px' }}>
                   <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>En FitApp desde</span>
                   <span style={{ fontWeight: 700 }}>{new Date(coach.created_at).toLocaleDateString()}</span>
                 </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../services/api';
-import { Navbar } from '../components/Navbar';
+
 import { useAuth } from '../context/AuthContext';
 
 interface Payment {
@@ -85,7 +85,7 @@ export const PaymentsPage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 1.5rem 4rem' }}>
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
@@ -178,7 +178,7 @@ export const PaymentsPage = () => {
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                 <thead>
-                  <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                  <tr style={{ backgroundColor: 'var(--color-bg)', borderBottom: '1px solid var(--color-border)' }}>
                     <th style={thStyle}>Fecha</th>
                     {!esCliente() && <th style={thStyle}>Cliente</th>}
                     <th style={thStyle}>Concepto</th>
@@ -194,7 +194,7 @@ export const PaymentsPage = () => {
                     </tr>
                   )}
                   {payments.map(p => (
-                    <tr key={p.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <tr key={p.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                       <td style={tdStyle}>{new Date(p.fecha).toLocaleDateString()}</td>
                       {!esCliente() && <td style={{ ...tdStyle, fontWeight: 700 }}>{p.client_nombre}</td>}
                       <td style={tdStyle}>{p.concepto}</td>
@@ -228,7 +228,7 @@ export const PaymentsPage = () => {
   );
 };
 
-const thStyle: React.CSSProperties = { padding: '12px 16px', fontSize: '0.85rem', color: '#64748b', fontWeight: 600 };
+const thStyle: React.CSSProperties = { padding: '12px 16px', fontSize: '0.85rem', color: 'var(--color-text-secondary)', fontWeight: 600 };
 const tdStyle: React.CSSProperties = { padding: '16px', fontSize: '0.9rem' };
 const labelStyle: React.CSSProperties = { display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem', color: '#475569' };
-const inputStyle: React.CSSProperties = { padding: '10px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '0.95rem', width: '100%', boxSizing: 'border-box' };
+const inputStyle: React.CSSProperties = { padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--color-border)', fontSize: '0.95rem', width: '100%', boxSizing: 'border-box' };

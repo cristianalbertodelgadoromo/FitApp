@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+
 import api from '../services/api';
-import { Navbar } from '../components/Navbar';
 
 interface ProgressRecord {
   id: number;
@@ -54,7 +53,7 @@ export const ProgressPage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 1.5rem 3rem' }}>
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
           <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
@@ -104,7 +103,7 @@ export const ProgressPage = () => {
                     style={{
                       padding: '1.25rem',
                       cursor: 'pointer',
-                      border: isSelected ? '2px solid #6366f1' : '1px solid #e2e8f0',
+                      border: isSelected ? '2px solid #6366f1' : '1px solid var(--color-border)',
                       backgroundColor: isSelected ? '#f5f3ff' : '#fff',
                       transition: 'all 0.2s',
                     }}
@@ -118,7 +117,7 @@ export const ProgressPage = () => {
                       />
                     )}
 
-                    <p style={{ margin: '0 0 0.5rem', fontWeight: 700, color: '#1e293b' }}>📅 {record.fecha}</p>
+                    <p style={{ margin: '0 0 0.5rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>📅 {record.fecha}</p>
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', fontSize: '0.875rem' }}>
                       <span style={{ color: 'var(--color-primary)', fontWeight: 700 }}>⚖️ {record.peso_kg} kg</span>
                       {record.porcentaje_grasa && <span style={{ color: '#f59e0b', fontWeight: 600 }}>🔥 {record.porcentaje_grasa}% grasa</span>}
