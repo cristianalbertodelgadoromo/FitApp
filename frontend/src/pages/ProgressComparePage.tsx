@@ -26,7 +26,7 @@ interface Diferencias {
 }
 
 const DiffBadge = ({ value, unit = 'kg', invertido = false }: { value: number; unit?: string; invertido?: boolean }) => {
-  const mejora = invertido ? value < 0 : value < 0;
+  const mejora = invertido ? value < 0 : value > 0;
   const color = value === 0 ? 'var(--color-text-secondary)' : mejora ? '#16a34a' : '#dc2626';
   const bg = value === 0 ? 'var(--color-border)' : mejora ? '#dcfce7' : '#fee2e2';
   const prefix = value > 0 ? '+' : '';
@@ -67,7 +67,10 @@ export const ProgressComparePage = () => {
 
 
   useEffect(() => {
-    if (!r1Id || !r2Id || !clientId) return;
+    if (!r1Id || !r2Id || !clientId) {
+      setIsLoading(false);
+      return;
+    }
     const load = async () => {
       try {
         const res = await api.get(`/progress/compare/${clientId}?r1=${r1Id}&r2=${r2Id}`);
@@ -83,7 +86,7 @@ export const ProgressComparePage = () => {
 
   return (
     <>
-      
+
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 1.5rem 3rem' }}>
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
           <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '0.9rem', padding: 0, marginBottom: '1rem' }}>

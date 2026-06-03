@@ -28,7 +28,7 @@ export const ProgressPage = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await api.get(`/progress/client/${clientId}`);
+        const res = await api.get(`/progress/${clientId}`);
         setRecords(res.data.data || []);
       } catch (err) {
         console.error(err);

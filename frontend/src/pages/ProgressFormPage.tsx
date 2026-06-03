@@ -54,7 +54,7 @@ export const ProgressFormPage = () => {
       if (photoEspalda) fd.append('foto_espalda', photoEspalda.file);
       if (photoLateral) fd.append('foto_lateral', photoLateral.file);
 
-      await api.post(`/progress/client/${clientId}`, fd, {
+      await api.post(`/progress/${clientId}`, fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       toast.success('Registro de avance guardado');

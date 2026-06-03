@@ -5,62 +5,15 @@
   flex-direction: column;
 }
 
-.mobile-topbar {
-  display: none;
-}
-
-.mobile-overlay {
-  display: none;
-}
-
 .layout-content {
   flex: 1;
-  margin-left: var(--sidebar-width);
+  margin-left: 0;
   padding: 24px;
   overflow-y: auto;
-  transition: margin-left 0.3s ease;
 }
 
 @media (max-width: 768px) {
-  .mobile-topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 24px;
-    background: var(--color-bg-sidebar);
-    color: white;
-    position: sticky;
-    top: 0;
-    z-index: 90;
-    box-shadow: var(--shadow-sm);
-  }
-  
-  .mobile-logo {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--color-primary);
-  }
-  
-  .mobile-menu-btn {
-    background: transparent;
-    border: none;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
   .layout-content {
-    margin-left: 0;
     padding: 16px;
-  }
-
-  .mobile-overlay {
-    display: block;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 95;
-    backdrop-filter: blur(2px);
   }
 }

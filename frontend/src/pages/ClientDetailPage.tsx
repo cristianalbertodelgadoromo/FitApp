@@ -6,12 +6,22 @@ export const ClientDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [client, setClient] = useState<any>(null);
+  const [latestProgress, setLatestProgress] = useState<any>(null);
 
   useEffect(() => {
     const fetchClient = async () => {
       try {
-        const res = await api.get(`/clients/${id}`);
-        setClient(res.data.data);
+        const [clientRes, progressRes] = await Promise.all([
+          api.get(`/clients/${id}`),
+          api.get(`/progress/${id}`).catch(() => ({ data: { data: [] } }))
+        ]);
+        setClient(clientRes.data.data);
+        
+        const records = progressRes.data.data || [];
+        if (records.length > 0) {
+          // El listado de progreso viene ordenado por fecha desc
+          setLatestProgress(records[0]);
+        }
       } catch (err) {
         console.error(err);
         navigate('/dashboard');
@@ -21,6 +31,9 @@ export const ClientDetailPage = () => {
   }, [id, navigate]);
 
   if (!client) return <div style={{ padding: '2rem', textAlign: 'center' }}>Cargando...</div>;
+
+  const pesoAMostrar = latestProgress?.peso_kg || client.peso_kg;
+  const alturaAMostrar = latestProgress?.altura_cm || client.altura_cm;
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto' }}>
@@ -42,19 +55,19 @@ export const ClientDetailPage = () => {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
         <div className="card" style={{ textAlign: 'center', backgroundColor: '#e3f2fd', border: 'none' }}>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Peso</p>
-          <h2 style={{ color: 'var(--color-secondary)', fontSize: '2.5rem' }}>{client.peso ? `${client.peso} kg` : '--'}</h2>
+          <h2 style={{ color: 'var(--color-secondary)', fontSize: '2.5rem' }}>{pesoAMostrar ? `${pesoAMostrar} kg` : '--'}</h2>
         </div>
         <div className="card" style={{ textAlign: 'center', backgroundColor: '#e8f5e9', border: 'none' }}>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Altura</p>
-          <h2 style={{ color: 'var(--color-primary)', fontSize: '2.5rem' }}>{client.altura ? `${client.altura} cm` : '--'}</h2>
+          <h2 style={{ color: 'var(--color-primary)', fontSize: '2.5rem' }}>{alturaAMostrar ? `${alturaAMostrar} cm` : '--'}</h2>
         </div>
         <div className="card" style={{ textAlign: 'center', backgroundColor: '#fff3e0', border: 'none' }}>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>IMC</p>
-          <h2 style={{ color: '#ff9800', fontSize: '2.5rem' }}>{client.imc || '--'}</h2>
+          <h2 style={{ color: '#ff9800', fontSize: '2.5rem' }}>{latestProgress?.imc || '--'}</h2>
         </div>
         <div className="card" style={{ textAlign: 'center', backgroundColor: '#fce4ec', border: 'none' }}>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>% Grasa</p>
-          <h2 style={{ color: '#e91e63', fontSize: '2.5rem' }}>{client.porcentaje_grasa ? `${client.porcentaje_grasa}%` : '--'}</h2>
+          <h2 style={{ color: '#e91e63', fontSize: '2.5rem' }}>{latestProgress?.porcentaje_grasa ? `${latestProgress.porcentaje_grasa}%` : '--'}</h2>
         </div>
       </div>
 

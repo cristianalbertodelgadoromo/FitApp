@@ -37,6 +37,17 @@ const PrivateRoute = ({ children, roles }: { children: JSX.Element; roles?: stri
   return children;
 };
 
+const ProgressRedirect = () => {
+  const { user } = useAuth();
+  if (user?.rol === 'client') {
+    return <Navigate to={`/progress/${user.id}`} replace />;
+  }
+  if (user?.rol === 'coach' || user?.rol === 'admin') {
+    return <Navigate to="/clients" replace />;
+  }
+  return <Navigate to="/dashboard" replace />;
+};
+
 function App() {
   return (
     <AuthProvider>
@@ -46,7 +57,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
 
           <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
-          <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/foods" element={<PrivateRoute roles={['admin', 'nutritionist', 'coach']}><FoodsPage /></PrivateRoute>} />
             <Route path="/exercises" element={<PrivateRoute roles={['admin', 'coach']}><ExercisesPage /></PrivateRoute>} />
             <Route path="/food-log" element={<FoodLogPage />} />
@@ -56,6 +67,15 @@ function App() {
             <Route path="/community" element={<CommunityPage />} />
             <Route path="/my-coach" element={<PrivateRoute roles={['client']}><CoachProfilePage /></PrivateRoute>} />
             <Route path="/payments" element={<PaymentsPage />} />
+
+            {/* Rutas agregadas en Fase 1 */}
+            <Route path="/clients/new" element={<PrivateRoute roles={['admin', 'coach']}><ClientFormPage /></PrivateRoute>} />
+            <Route path="/clients/:id" element={<PrivateRoute roles={['admin', 'coach', 'client']}><ClientDetailPage /></PrivateRoute>} />
+            <Route path="/progress" element={<PrivateRoute roles={['admin', 'coach', 'client']}><ProgressRedirect /></PrivateRoute>} />
+            <Route path="/progress/:clientId" element={<PrivateRoute roles={['admin', 'coach', 'client']}><ProgressPage /></PrivateRoute>} />
+            <Route path="/progress/new/:clientId" element={<PrivateRoute roles={['admin', 'coach', 'client']}><ProgressFormPage /></PrivateRoute>} />
+            <Route path="/progress/compare" element={<PrivateRoute roles={['admin', 'coach', 'client']}><ProgressComparePage /></PrivateRoute>} />
+
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Route>
         </Routes>

@@ -103,7 +103,7 @@ export const DashboardPage = () => {
             api.get(`/progress/${meRes.data.user.id}`).catch(() => ({ data: { data: [] } })),
             api.get(`/routines/client/${meRes.data.user.id}`).catch(() => ({ data: { data: null } }))
           ]);
-          
+
           setProfileData((prev: any) => ({
             ...prev,
             totalCaloriasHoy: foodLogsRes.data.data?.total_calorias || 0,
@@ -150,14 +150,14 @@ export const DashboardPage = () => {
       { name: 'Rutinas de Entrenamiento', desc: 'Diseño, series, repeticiones y asignación a clientes.', path: '/routines', role: 'Entrenador / Módulo 2', icon: <IconDumbbell /> },
       { name: 'Mi Rutina Activa', desc: 'Visualización de entrenamientos asignados en tiempo real.', path: '/my-routine', role: 'Atleta / Módulo 2', icon: <IconDumbbell /> },
       { name: 'Avance Quincenal', desc: 'Historial de registros corporales, peso e índice de masa corporal.', path: '/progress/3', role: 'Atleta / Módulo 3', icon: <IconTrending /> },
-      { name: 'Comparador de Avance', desc: 'Contraste detallado de medidas físicas e IMC entre fechas.', path: '/progress/compare?r1=1&r2=2', role: 'Atleta / Módulo 3', icon: <IconTrending /> },
+      { name: 'Comparador de Avance', desc: 'Contraste detallado de medidas físicas e IMC entre fechas.', path: '/progress/compare?clientId=3&r1=1&r2=2', role: 'Atleta / Módulo 3', icon: <IconTrending /> },
       { name: 'Comunidad FitApp', desc: 'Muro social interactivo de entrenamientos y nutrición.', path: '/community', role: 'Comunidad', icon: <IconUsers /> },
       { name: 'Planes de Pagos', desc: 'Historial de suscripciones, estados de cuenta y facturación.', path: '/payments', role: 'Financiero', icon: <IconCreditCard /> }
     ];
 
     return (
       <>
-        
+
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -251,7 +251,7 @@ export const DashboardPage = () => {
   if (esCoach()) {
     return (
       <>
-        
+
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -337,7 +337,7 @@ export const DashboardPage = () => {
 
     return (
       <>
-        
+
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -424,7 +424,7 @@ export const DashboardPage = () => {
   // ----------------------------------------------------
   return (
     <>
-      
+
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
